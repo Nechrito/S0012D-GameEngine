@@ -10,7 +10,9 @@ ImplementNebulaApplication()
 void NebulaMain(const Util::CommandLineArgs& args)
 {
     GameEngine::Engine app;
-    app.SetCmdLineArgs(args);
+
+	app.SetCmdLineArgs(args);
+	
     if (app.Open())
     {
         app.Run();

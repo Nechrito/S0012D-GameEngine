@@ -1,7 +1,3 @@
-//------------------------------------------------------------------------------
-// Engine.cc
-// (C) 2018 Individual contributors, see AUTHORS file
-//------------------------------------------------------------------------------
 #include "stdneb.h"
 #include "core/refcounted.h"
 #include "timing/timer.h"
@@ -57,30 +53,25 @@ namespace GameEngine
         this->SetCompanyName("Nebula");
     }
 
-    Engine::~Engine()
-    {
-    	
-    }
-
     bool Engine::Open()
     {
         if (Application::Open())
         {
             // create Nebula runtime
             this->coreServer = Core::CoreServer::Create();
-            this->coreServer->SetCompanyName(Application::Instance()->GetCompanyName());
+            this->coreServer->SetCompanyName(Instance()->GetCompanyName());
             this->coreServer->SetAppName(Util::StringAtom("Nebula"));
 
             this->inputServer = Input::InputServer::Create();
-            this->ioServer = IO::IoServer::Create();
+            this->ioServer = IoServer::Create();
 
-            this->ioInterface = IO::IoInterface::Create();
+            this->ioInterface = IoInterface::Create();
             this->ioInterface->Open();
 
             this->resMgr = Resources::ResourceManager::Create();
             this->resMgr->Open();
 
-            Util::String root = IO::FSWrapper::GetHomeDirectory();
+            Util::String root = FSWrapper::GetHomeDirectory();
 
 #if PUBLIC_BUILD
             if (System::NebulaSettings::Exists(Application::Instance()->GetCompanyName(), Application::Instance()->GetAppTitle(), "path"))
@@ -111,22 +102,22 @@ namespace GameEngine
 
 #if __NEBULA_HTTP_FILESYSTEM__
             // setup http subsystem
-            this->httpClientRegistry = Http::HttpClientRegistry::Create();
+            this->httpClientRegistry = HttpClientRegistry::Create();
             this->httpClientRegistry->Setup();
 #endif
 
 #if __NEBULA_HTTP__
             // setup http subsystem
-            this->httpInterface = Http::HttpInterface::Create();
+            this->httpInterface = HttpInterface::Create();
             this->httpInterface->SetTcpPort(this->defaultTcpPort);
             this->httpInterface->Open();
-            this->httpServerProxy = Http::HttpServerProxy::Create();
+            this->httpServerProxy = HttpServerProxy::Create();
             this->httpServerProxy->Open();
-            this->httpServerProxy->AttachRequestHandler(Debug::CorePageHandler::Create());
-            this->httpServerProxy->AttachRequestHandler(Debug::ThreadPageHandler::Create());
-            this->httpServerProxy->AttachRequestHandler(Debug::MemoryPageHandler::Create());
-            this->httpServerProxy->AttachRequestHandler(Debug::ConsolePageHandler::Create());
-            this->httpServerProxy->AttachRequestHandler(Debug::IoPageHandler::Create());
+            this->httpServerProxy->AttachRequestHandler(CorePageHandler::Create());
+            this->httpServerProxy->AttachRequestHandler(ThreadPageHandler::Create());
+            this->httpServerProxy->AttachRequestHandler(MemoryPageHandler::Create());
+            this->httpServerProxy->AttachRequestHandler(ConsolePageHandler::Create());
+            this->httpServerProxy->AttachRequestHandler(IoPageHandler::Create());
 
             // setup debug subsystem
             this->debugInterface = DebugInterface::Create();
@@ -146,23 +137,33 @@ namespace GameEngine
                 this->GetAppTitle(), "", CoreGraphics::AntiAliasQuality::None, true, true, false
             };
             this->wnd = CreateWindow(wndInfo);
-            this->cam = Graphics::CreateEntity();
+            this->cam = CreateEntity();
 
 #if NEBULA_ENABLE_PROFILING
             Profiling::ProfilingRegisterThread();
 #endif
 
-            // create contexts, this could and should be bundled together
+            // Create contexts, this could and should be bundled together
             CameraContext::Create();
             ModelContext::Create();
             ObserverContext::Create();
             ObservableContext::Create();
 
+            // Catapult entity
+            GraphicsEntityId catapultEntity = CreateEntity();
+            Graphics::RegisterEntity<ModelContext, ObservableContext>(catapultEntity);
+            ModelContext::Setup(catapultEntity, "mdl:Units/Unit_Catapult.n3", "Examples");
+            ModelContext::SetTransform(catapultEntity, Math::matrix44::translation(Math::point(0, 0, 0)));
+            ObservableContext::Setup(catapultEntity, Model);
+        	
+            // Camera entity
             Graphics::RegisterEntity<CameraContext, ObserverContext>(this->cam);
-            CameraContext::SetupProjectionFov(this->cam, width / (float)height, Math::n_deg2rad(60.f), 0.1f, 1000.0f);
 
-            Clustering::ClusterContext::Create(0.1f, 1000.0f, this->wnd);
-            Lighting::LightContext::Create();
+        	// Projection
+            CameraContext::SetupProjectionFov(this->cam, width / (float)height, Math::n_deg2rad(fov), znear, zfar);
+
+        	Clustering::ClusterContext::Create(znear, zfar, this->wnd);
+        	Lighting::LightContext::Create();
             Characters::CharacterContext::Create();
             Im3d::Im3dContext::Create();
             Dynui::ImguiContext::Create();
@@ -170,22 +171,23 @@ namespace GameEngine
             this->view = gfxServer->CreateView("mainview", "frame:vkdefault.json"_uri);
             this->stage = gfxServer->CreateStage("stage1", true);
 
-            this->globalLight = Graphics::CreateEntity();
+            this->globalLight = CreateEntity();
             Lighting::LightContext::RegisterEntity(this->globalLight);
             Lighting::LightContext::SetupGlobalLight(this->globalLight, Math::float4(1, 1, 1, 0), 1.0f, Math::float4(0, 0, 0, 0), Math::float4(0, 0, 0, 0), 0.0f, -Math::vector(1, 1, 1), true);
 
+        	
             this->ResetCamera();
             CameraContext::SetTransform(this->cam, this->mayaCameraUtil.GetCameraTransform());
 
             this->view->SetCamera(this->cam);
             this->view->SetStage(this->stage);
 
-            // register visibility system
+            // Register visibility system
             ObserverContext::CreateBruteforceSystem({});
 
             ObserverContext::Setup(this->cam, VisibilityEntityType::Camera);
 
-            // create environment context for the atmosphere effects
+            // Create environment context for the atmosphere effects
             EnvironmentContext::Create(this->globalLight);
 
             this->UpdateCamera();
@@ -195,13 +197,9 @@ namespace GameEngine
         return false;
     }
 
-    //------------------------------------------------------------------------------
-    /**
-    */
-    void
-        Engine::Close()
+    void Engine::Close()
     {
-        App::Application::Close();
+        Application::Close();
         DestroyWindow(this->wnd);
         this->gfxServer->DiscardStage(this->stage);
         this->gfxServer->DiscardView(this->view);
@@ -237,45 +235,48 @@ namespace GameEngine
         this->coreServer = nullptr;
     }
 
-    //------------------------------------------------------------------------------
-    /**
-    */
-    void
-        Engine::Run()
+    void Engine::Run()
     {
         bool run = true;
 
         const Ptr<Input::Keyboard>& keyboard = inputServer->GetDefaultKeyboard();
         const Ptr<Input::Mouse>& mouse = inputServer->GetDefaultMouse();
 
-        const Graphics::GraphicsEntityId exampleEntity = Graphics::CreateEntity();
+        const GraphicsEntityId exampleEntity = CreateEntity();
         // Register entity to various graphics contexts.
         // The template parameters are which contexts that the entity should be registered to.
         // ModelContext takes care of loading models and also handles transforms for instances of models.
         // Registering an entity to the ObservableContext will allow cameras to observe the entity (adds the entity to visibility culling system)
         Graphics::RegisterEntity<ModelContext, ObservableContext>(exampleEntity);
+    	
         // Setup the entitys model instance
         ModelContext::Setup(exampleEntity, "mdl:system/placeholder.n3", "Examples");
+    	
         // Set the transform of the entity
         ModelContext::SetTransform(exampleEntity, Math::matrix44::translation(Math::point(0, 0, 0)));
+    	
         // Setup the observable as a model
-        ObservableContext::Setup(exampleEntity, VisibilityEntityType::Model);
+        ObservableContext::Setup(exampleEntity, Model);
 
         // GameEngine animated entity
-        const Graphics::GraphicsEntityId animatedEntity = Graphics::CreateEntity();
+        const GraphicsEntityId animatedEntity = CreateEntity();
+    	
         // The CharacterContext holds skinned, animated entites and takes care of playing animations etc.
         Graphics::RegisterEntity<ModelContext, ObservableContext, Characters::CharacterContext>(animatedEntity);
+    	
         // create model and move it to the front
         ModelContext::Setup(animatedEntity, "mdl:Units/Unit_Footman.n3", "Examples");
         ModelContext::SetTransform(animatedEntity, Math::matrix44::translation(Math::point(5, 0, 0)));
-        ObservableContext::Setup(animatedEntity, VisibilityEntityType::Model);
+        ObservableContext::Setup(animatedEntity, Model);
+    	
         // Setup the character context instance.
         // nsk3 is the skeleton resource, nax3 is the animation resource. nax3 files can contain multiple animation clips
         Characters::CharacterContext::Setup(animatedEntity, "ske:Units/Unit_Footman.nsk3", "ani:Units/Unit_Footman.nax3", "Examples");
         Characters::CharacterContext::PlayClip(animatedEntity, nullptr, 0, 0, Characters::Append, 1.0f, 1, Math::n_rand() * 100.0f, 0.0f, 0.0f, Math::n_rand() * 100.0f);
 
         // Create a point light entity
-        const Graphics::GraphicsEntityId pointLight = Graphics::CreateEntity();
+        const GraphicsEntityId pointLight = CreateEntity();
+    	
         // You can also register to contexts directly
         Lighting::LightContext::RegisterEntity(pointLight);
         Lighting::LightContext::SetupPointLight(pointLight, Math::float4(4.5, 0.5, 0.2, 1), 10.0f, Math::matrix44::translation(1, 2, 1), 100.0f, true);
@@ -446,7 +447,7 @@ namespace GameEngine
         this->freeCamUtil.SetRotateButton(mouse->ButtonPressed(Input::MouseButton::LeftButton));
         this->freeCamUtil.Update();
 
-        switch (this->cameraMode)
+    	switch (this->cameraMode)
         {
         case 0:
             CameraContext::SetTransform(this->cam, Math::matrix44::inverse(this->mayaCameraUtil.GetCameraTransform()));

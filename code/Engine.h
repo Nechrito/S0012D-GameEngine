@@ -23,14 +23,17 @@ namespace GameEngine
     class Engine final : public App::Application
     {
     public:
+    	
         Engine();
-        ~Engine();
 
-        bool Open();
-        void Close();
-        void Run();
+        bool Open() override;
+        void Close() override;
+        void Run() override;
 
+        ~Engine() = default;
+    	
     protected:
+    	
         void RenderUI();
         void UpdateCamera();
         void ResetCamera();
@@ -60,7 +63,12 @@ namespace GameEngine
         int cameraMode = 0;
         float zoomIn = 0.0f;
         float zoomOut = 0.0f;
-        Math::float2 panning{ 0.0f,0.0f };
+    	
+        float znear = 0.1f;
+        float zfar = 1000.0f;
+        float fov = 60.0f;
+    	
+    	Math::float2 panning{ 0.0f,0.0f };
         Math::float2 orbiting{ 0.0f,0.0f };
         RenderUtil::MayaCameraUtil mayaCameraUtil;
         RenderUtil::FreeCameraUtil freeCamUtil;
