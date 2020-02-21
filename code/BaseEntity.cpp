@@ -1,16 +1,48 @@
 #include "BaseEntity.h"
 #include <cassert>
+#include "Telegram.h"
 
-int GameEngine::BaseEntity::NextID = 0;
-
-GameEngine::BaseEntity::BaseEntity(const int id)
+namespace GameEngine
 {
-	this->SetID(id);
-}
+	__ImplementClass(GameEngine::BaseEntity, 'GEBE', Core::RefCounted);
 
-void GameEngine::BaseEntity::SetID(const int id)
-{
-	assert(id >= NextID && "Invalid ID");
-	UniqueID = id;
-	NextID = UniqueID + 1;
+	int BaseEntity::NextID = 0;
+
+	BaseEntity::BaseEntity()
+	{
+		UniqueID = NextID;
+		NextID = UniqueID + 1;
+	}
+
+	void BaseEntity::HandleMessage(const Telegram& msg)
+	{
+		for (Component* component : Components)
+		{
+			component->HandleMessage(msg);
+		}
+	}
+
+	void BaseEntity::Init()
+	{
+		for (Component* component : Components)
+		{
+			component->Init();
+		}
+	}
+
+	void BaseEntity::Update()
+	{
+		for (Component* component : Components)
+		{
+			component->Update();
+		}
+	}
+
+	void BaseEntity::Shutdown()
+	{
+		for (Component* component : Components)
+		{
+			component->Shutdown();
+		}
+	}
 }

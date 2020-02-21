@@ -1,10 +1,7 @@
 #pragma once
-//#include "util/array.h"
-//#include "util/queue.h"
-//#include "util/variant.h"
-//#include "util/stringatom.h"
-//#include "Component.h"
+#include "stdneb.h"
 #include "MessageDispatcher.h"
+#include "util/stringatom.h"
 
 
 namespace GameEngine
@@ -23,8 +20,8 @@ namespace GameEngine
 		void Shutdown();
 		
 	private:
-		//Util::Array<BaseEntity*> Entities;
-		//Util::HashTable<Util::StringAtom, IndexT> EntityTable;
+		Util::Array<BaseEntity*> Entities;
+		Util::HashTable<Util::StringAtom, IndexT> EntityTable;
 	};
 }
 

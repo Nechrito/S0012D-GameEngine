@@ -1,25 +1,34 @@
 #pragma once
-class Telegram;
+#include "stdneb.h"
+#include "core/refcounted.h"
+#include "util/variant.h"
+#include "util/stringatom.h"
+#include "game/component/component.h"
+#include "Component.h"
+
+struct Telegram;
 
 namespace GameEngine
 {
-	class BaseEntity 
+	class BaseEntity final : public Core::RefCounted
 	{
-		friend class EntityManager;
+		__DeclareClass(GameEngine::BaseEntity)
 		
 	public:
-		
-		int ID() const { return UniqueID; }
-		
-		BaseEntity(int id);
-
-		virtual bool HandleMessage(const Telegram& msg) = 0;
-
-		virtual ~BaseEntity() = default;
-
-	private:
-		int UniqueID;
 		static int NextID;
-		void SetID(int id);
+		int UniqueID;
+		
+		BaseEntity();
+
+		void HandleMessage(const Telegram& msg);
+
+		void Init();
+		void Update();
+		void Shutdown();
+
+	protected:
+		Util::StringAtom Name;
+		Util::Array<Component*> Components;
+		Util::HashTable<Util::StringAtom, Util::Variant> Variables;
 	};
 }

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "app/application.h"
 #include "renderutil/mayacamerautil.h"
 #include "renderutil/freecamerautil.h"
