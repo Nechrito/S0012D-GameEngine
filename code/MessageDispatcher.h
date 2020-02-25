@@ -11,9 +11,13 @@ namespace GameEngine
 
 	class MessageDispatcher : public Core::RefCounted
 	{
-		__DeclareSingleton(GameEngine::MessageDispatcher)
+		__DeclareClass(MessageDispatcher)
+		__DeclareSingleton(MessageDispatcher)
 		
 	public:
+
+		MessageDispatcher();
+		~MessageDispatcher();
 
 		void SendMessage(double delay, int sender, int receiver, int msg);
 		void DispatchDelayedMessages();

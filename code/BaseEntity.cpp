@@ -4,7 +4,8 @@
 
 namespace GameEngine
 {
-	__ImplementClass(GameEngine::BaseEntity, 'GEBE', Core::RefCounted);
+	
+	__ImplementClass(GameEngine::BaseEntity, 'GEBE', Core::RefCounted)
 
 	int BaseEntity::NextID = 0;
 
@@ -12,6 +13,48 @@ namespace GameEngine
 	{
 		UniqueID = NextID;
 		NextID = UniqueID + 1;
+	}
+
+	bool BaseEntity::RegisterVariable(const Util::StringAtom& name, const Util::Variant variable, const bool overrideExisting)
+	{
+		if (Variables.Contains(name))
+		{
+			if (!overrideExisting)
+				return false;
+
+			Variables[name] = variable;
+		}
+		
+		Variables.Add(name, variable);
+
+		return true;
+	}
+
+	bool BaseEntity::RegisterComponent(Component* component)
+	{
+		const auto existingComponent = Components.Find(component);
+		
+		if (existingComponent != nullptr)
+		{
+			return false;
+		}
+
+		component->SetOwner(this);
+		component->Init();
+
+		auto name = component->GetName();
+		component->SetKey(name);
+		ComponentsHash.Add(name, Components.Size());
+		Components.Append(component);
+		
+		return true;
+	}
+
+	Component* BaseEntity::GetComponent(Util::StringAtom name)
+	{
+		if (Components.Size() > 0 && ComponentsHash.Size() > 0)
+			return Components[ComponentsHash[name]];
+		return nullptr;
 	}
 
 	void BaseEntity::HandleMessage(const Telegram& msg)

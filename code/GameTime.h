@@ -7,22 +7,27 @@ namespace GameEngine
 {
 	class GameTime final : public Core::RefCounted
 	{
-		__DeclareSingleton(GameEngine::GameTime)
-		
+		__DeclareClass(GameTime)
+		__DeclareSingleton(GameTime)
 	public:
-
-		GameTime() : count(0), frames(0) { }
-
+		double deltaTime;
+		double fixedDeltaTime;
+		float ticks;
+		float timeScale;
+		
+		GameTime();
+		~GameTime();
+		
 		void Update();
 
-		// basic framecounter
-		void StartTimer();
-		void StopTimer();
-		int GetFramesElapsed() const;
+		/* Framecounter */
+		void TimerStart();
+		void TimerStop();
+		int TimerResult() const;
 		
 	private:
 		long count;
 		int frames;
-		
+		int lastFrameTick;
 	};
 }

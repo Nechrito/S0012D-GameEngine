@@ -28,6 +28,8 @@
 #include "io/fswrapper.h"
 #include "system/nebulasettings.h"
 #include "profiling/profiling.h"
+#include "EntityManager.h"
+#include "BaseEntity.h"
 
 
 #ifdef __WIN32__
@@ -149,12 +151,9 @@ namespace GameEngine
             ObserverContext::Create();
             ObservableContext::Create();
 
-            // Catapult entity
-            GraphicsEntityId catapultEntity = CreateEntity();
-            Graphics::RegisterEntity<ModelContext, ObservableContext>(catapultEntity);
-            ModelContext::Setup(catapultEntity, "mdl:Units/Unit_Catapult.n3", "Examples");
-            ModelContext::SetTransform(catapultEntity, Math::matrix44::translation(Math::point(0, 0, 0)));
-            ObservableContext::Setup(catapultEntity, Model);
+            EntityManager::Create();
+            EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
+            EntityManager::Instance()->Init();
         	
             // Camera entity
             Graphics::RegisterEntity<CameraContext, ObserverContext>(this->cam);
@@ -241,38 +240,6 @@ namespace GameEngine
 
         const Ptr<Input::Keyboard>& keyboard = inputServer->GetDefaultKeyboard();
         const Ptr<Input::Mouse>& mouse = inputServer->GetDefaultMouse();
-
-        const GraphicsEntityId exampleEntity = CreateEntity();
-        // Register entity to various graphics contexts.
-        // The template parameters are which contexts that the entity should be registered to.
-        // ModelContext takes care of loading models and also handles transforms for instances of models.
-        // Registering an entity to the ObservableContext will allow cameras to observe the entity (adds the entity to visibility culling system)
-        Graphics::RegisterEntity<ModelContext, ObservableContext>(exampleEntity);
-    	
-        // Setup the entitys model instance
-        ModelContext::Setup(exampleEntity, "mdl:system/placeholder.n3", "Examples");
-    	
-        // Set the transform of the entity
-        ModelContext::SetTransform(exampleEntity, Math::matrix44::translation(Math::point(0, 0, 0)));
-    	
-        // Setup the observable as a model
-        ObservableContext::Setup(exampleEntity, Model);
-
-        // GameEngine animated entity
-        const GraphicsEntityId animatedEntity = CreateEntity();
-    	
-        // The CharacterContext holds skinned, animated entites and takes care of playing animations etc.
-        Graphics::RegisterEntity<ModelContext, ObservableContext, Characters::CharacterContext>(animatedEntity);
-    	
-        // create model and move it to the front
-        ModelContext::Setup(animatedEntity, "mdl:Units/Unit_Footman.n3", "Examples");
-        ModelContext::SetTransform(animatedEntity, Math::matrix44::translation(Math::point(5, 0, 0)));
-        ObservableContext::Setup(animatedEntity, Model);
-    	
-        // Setup the character context instance.
-        // nsk3 is the skeleton resource, nax3 is the animation resource. nax3 files can contain multiple animation clips
-        Characters::CharacterContext::Setup(animatedEntity, "ske:Units/Unit_Footman.nsk3", "ani:Units/Unit_Footman.nax3", "Examples");
-        Characters::CharacterContext::PlayClip(animatedEntity, nullptr, 0, 0, Characters::Append, 1.0f, 1, Math::n_rand() * 100.0f, 0.0f, 0.0f, Math::n_rand() * 100.0f);
 
         // Create a point light entity
         const GraphicsEntityId pointLight = CreateEntity();

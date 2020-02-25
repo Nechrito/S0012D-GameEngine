@@ -1,13 +1,23 @@
 #include "MessageDispatcher.h"
 #include "BaseEntity.h"
 #include "EntityManager.h"
-#include "Timer.h"
 #include "GameTime.h"
 
 namespace GameEngine
 {
-	__ImplementSingleton(GameEngine::MessageDispatcher);
-	
+	__ImplementClass(MessageDispatcher, 'GEMD', Core::RefCounted)
+	__ImplementSingleton(MessageDispatcher)
+
+	MessageDispatcher::MessageDispatcher()
+	{
+		__ConstructSingleton
+	}
+
+	MessageDispatcher::~MessageDispatcher()
+	{
+		__DestructSingleton
+	}
+
 	void MessageDispatcher::SendMessage(double delay, int sender, int receiver, int msg)
 	{
 		BaseEntity* entity = EntityManager::Singleton->GetEntity(receiver);
@@ -26,7 +36,7 @@ namespace GameEngine
 		}
 		else
 		{
-			const double currentTime = GameTime::Singleton->GetFramesElapsed();
+			const double currentTime = GameTime::Singleton->TimerResult();
 			telegram.DispatchTime = currentTime + delay;
 
 			// Add the telegram to the queue
@@ -37,7 +47,7 @@ namespace GameEngine
 
 	void MessageDispatcher::DispatchDelayedMessages()
 	{
-		const double currentTime = GameTime::Singleton->GetFramesElapsed();
+		const double currentTime = GameTime::Singleton->TimerResult();
 
 		while (!PriorityQueue.IsEmpty())
 		{
