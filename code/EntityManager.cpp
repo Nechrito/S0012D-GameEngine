@@ -26,22 +26,21 @@ namespace GameEngine
 
 	void EntityManager::RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri, const Util::StringAtom& tag, const Math::point& position)
 	{
+		
 		BaseEntity* entity = BaseEntity::Create();
 		entity->Name = name;
 
 		TransformComponent* transform = TransformComponent::Create();
 		transform->SetKey("Transform");
-		transform->SetOwner(entity);
 		
 		GraphicsComponent* graphics = GraphicsComponent::Create();
 		graphics->SetKey("Graphics");
-		graphics->SetOwner(entity);
 
 		transform->SetPosition(position);
 		graphics->Load(uri, tag);
 		
 		entity->RegisterComponent(transform);
-		entity->RegisterComponent(graphics);
+		//entity->RegisterComponent(graphics);
 
 		Entities.Append(entity);
 		EntityTable.Add(name, Entities.Size());

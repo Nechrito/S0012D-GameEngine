@@ -30,6 +30,7 @@
 #include "profiling/profiling.h"
 #include "EntityManager.h"
 #include "BaseEntity.h"
+#include "GameTime.h"
 
 
 #ifdef __WIN32__
@@ -151,9 +152,11 @@ namespace GameEngine
             ObserverContext::Create();
             ObservableContext::Create();
 
-            EntityManager::Create();
-            EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
-            EntityManager::Instance()->Init();
+            GameTime::Create();
+            MessageDispatcher::Create();
+        	EntityManager::Create();
+
+        	EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
         	
             // Camera entity
             Graphics::RegisterEntity<CameraContext, ObserverContext>(this->cam);

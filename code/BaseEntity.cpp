@@ -40,12 +40,9 @@ namespace GameEngine
 		}
 
 		component->SetOwner(this);
-		component->Init();
 
-		auto name = component->GetName();
-		component->SetKey(name);
-		ComponentsHash.Add(name, Components.Size());
 		Components.Append(component);
+		ComponentsHash.Add(component->GetName(), Components.Size());
 		
 		return true;
 	}
