@@ -18,10 +18,6 @@ namespace GameEngine
 		int UniqueID;
 
 		Util::StringAtom Name;
-		Util::Array<Component*> Components;
-		Util::HashTable<Util::StringAtom, IndexT> ComponentsHash;
-
-		Util::HashTable<Util::StringAtom, Util::Variant> Variables;
 
 		BaseEntity();
 
@@ -37,7 +33,14 @@ namespace GameEngine
 		void Shutdown();
 
 	private:
-#define Nameof(x) #x
 		
+		/// un-used
+#define Nameof(x) #x
+
+		/// storing mechanism 
+		Util::Array<Component*> Components;
+		Util::HashTable<Util::StringAtom, IndexT> ComponentsHash;
+		Util::HashTable<Util::StringAtom, Util::Variant> Variables;
+
 	};
 }

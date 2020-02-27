@@ -157,7 +157,8 @@ namespace GameEngine
         	EntityManager::Create();
 
         	EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
-        	
+            EntityManager::Instance()->RegisterEntity("catapult", "mdl:Units/Unit_Catapult.n3", "Examples", Math::point(0, -50, 3));
+
             // Camera entity
             Graphics::RegisterEntity<CameraContext, ObserverContext>(this->cam);
 
@@ -235,6 +236,8 @@ namespace GameEngine
 
         this->coreServer->Close();
         this->coreServer = nullptr;
+
+        EntityManager::Instance()->Shutdown();
     }
 
     void Engine::Run()
@@ -271,6 +274,7 @@ namespace GameEngine
             this->gfxServer->BeginFrame();
 
             // put game code which doesn't need visibility data or animation here
+            EntityManager::Instance()->Update();
 
             this->gfxServer->BeforeViews();
 

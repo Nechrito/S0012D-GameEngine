@@ -16,7 +16,7 @@ namespace GameEngine
 		Graphics::GraphicsEntityId ID;
 
 		GraphicsComponent() = default;
-		
+
 		void Init() override;
 		void Update() override;
 		void Shutdown() override;

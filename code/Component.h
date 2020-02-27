@@ -1,6 +1,7 @@
 #pragma once
-#include <code\foundation\core\debug.h>
+#include "stdneb.h"
 #include "util/stringatom.h"
+
 
 // Forward declaration avoids the parsing the compiler would have to do during an #include "..."
 // A better optimization would ofc be pre-compiled headers
@@ -10,15 +11,15 @@ namespace GameEngine
 {
 	class BaseEntity;
 
-	class Component 
+	class Component
 	{
 	public:
 		
 		Component() : Owner(nullptr), Initialized(false) { }
 
 		virtual void SetOwner(BaseEntity* entity);
-		virtual void SetKey(const Util::StringAtom& value);
-		virtual Util::StringAtom GetName();
+		virtual void SetType(const Util::StringAtom& value);
+		virtual Util::StringAtom GetType();
 
 		virtual void Init();
 		virtual void Update();
@@ -29,7 +30,7 @@ namespace GameEngine
 
 	protected:
 		BaseEntity* Owner;
-		Util::StringAtom Key;
+		Util::StringAtom Type;
 		bool Initialized;
 	};
 
@@ -38,14 +39,14 @@ namespace GameEngine
 		this->Owner = entity;
 	}
 
-	inline void Component::SetKey(const Util::StringAtom& value)
+	inline void Component::SetType(const Util::StringAtom& value)
 	{
-		this->Key = value;
+		this->Type = value;
 	}
 
-	inline Util::StringAtom Component::GetName()
+	inline Util::StringAtom Component::GetType()
 	{
-		return Key;
+		return Type;
 	}
 
 	inline void Component::Init()

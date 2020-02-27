@@ -1,4 +1,5 @@
 #pragma once
+#include "stdneb.h"
 struct Telegram
 {
 	int Sender;

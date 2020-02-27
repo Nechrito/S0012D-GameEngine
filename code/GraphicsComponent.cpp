@@ -11,11 +11,6 @@ namespace GameEngine
 
 	void GraphicsComponent::Load(const Resources::ResourceName& resource, const Util::StringAtom& tag)
 	{
-		if (!Initialized)
-		{
-			Init();
-		}
-		
 		Models::ModelContext::Setup(ID, resource, tag);
 		Visibility::ObservableContext::Setup(ID, Visibility::Model);
 
@@ -29,6 +24,10 @@ namespace GameEngine
 
 	void GraphicsComponent::Init()
 	{
+		if (Initialized)
+			return;
+		
+		this->SetType("Graphics");
 		ID = Graphics::CreateEntity();
 		Graphics::RegisterEntity<Models::ModelContext, Visibility::ObservableContext>(ID);
 	}
@@ -45,7 +44,7 @@ namespace GameEngine
 
 	bool GraphicsComponent::HandleMessage(const Telegram& msg)
 	{
-		return false;
+		return true;
 	}
 }
 

@@ -8,7 +8,11 @@ namespace GameEngine
 
 	void TransformComponent::Init()
 	{
-		Velocity = Math::float4();
+		if (Initialized)
+			return;
+
+		this->SetType("Transform");
+		Velocity = Math::float4(0);
 		Owner->RegisterVariable("Velocity", Velocity);
 	}
 
@@ -26,7 +30,7 @@ namespace GameEngine
 
 	bool TransformComponent::HandleMessage(const Telegram& msg)
 	{
-		return false;
+		return true;
 	}
 
 	void TransformComponent::Translate(Math::float4 position)
@@ -47,6 +51,6 @@ namespace GameEngine
 
 	void TransformComponent::SetScale(Math::float4 scale)
 	{
-		
+		// Transform.setrotate();
 	}
 }

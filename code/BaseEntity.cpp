@@ -1,6 +1,7 @@
 #include "BaseEntity.h"
 #include <cassert>
 #include "Telegram.h"
+#include <stdexcept>
 
 namespace GameEngine
 {
@@ -32,18 +33,18 @@ namespace GameEngine
 
 	bool BaseEntity::RegisterComponent(Component* component)
 	{
-		const auto existingComponent = Components.Find(component);
+		auto existingComponent = Components.Find(component);
 		
-		if (existingComponent != nullptr)
+		if (component == nullptr || existingComponent != nullptr)
 		{
 			return false;
 		}
 
-		component->SetOwner(this);
+		if (!ComponentsHash.Contains(component->GetType()))
+			ComponentsHash.Add(component->GetType(), Components.Size());
 
 		Components.Append(component);
-		ComponentsHash.Add(component->GetName(), Components.Size());
-		
+
 		return true;
 	}
 
