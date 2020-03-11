@@ -12,8 +12,23 @@ nebula_begin_app(GameEngine windowed)
     fips_dir(code)
         fips_files(
             main.cc
-            exampleapp.cc
-            exampleapp.h
+           Engine.cc
+		   Engine.h
+		   BaseEntity.cpp
+		   BaseEntity.h
+		   Component.h
+		   EntityManager.cpp
+		   EntityManager.h
+		   GameTime.cpp
+		   GameTime.h
+		   GraphicsComponent.cpp
+		   GraphicsComponent.h
+		   MessageDispatcher.cpp
+		   MessageDispatcher.h
+		   Telegram.cpp
+		   Telegram.h
+		   TransformComponent.cpp
+		   TransformComponent.h
         )
 
     fips_deps(foundation render resource dynui scripting)
