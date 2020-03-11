@@ -16,9 +16,9 @@ namespace GameEngine
 
 		if (Owner != nullptr)
 		{
-			const auto entityTransform = dynamic_cast<TransformComponent*>(Owner->GetComponent("Transform"));
-			if (entityTransform != nullptr)
-				 Models::ModelContext::SetTransform(ID, entityTransform->Transform.getmatrix());
+			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(Owner->GetComponent("Transform"));
+			if (entityTransform)
+				Models::ModelContext::SetTransform(ID, entityTransform->Transform.getmatrix());
 		}
 	}
 
@@ -34,6 +34,12 @@ namespace GameEngine
 
 	void GraphicsComponent::Update()
 	{
+		if (Owner != nullptr)
+		{
+			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(Owner->GetComponent("Transform"));
+			if (entityTransform)
+				Models::ModelContext::SetTransform(ID, entityTransform->Transform.getmatrix());
+		}
 	}
 
 	void GraphicsComponent::Shutdown()

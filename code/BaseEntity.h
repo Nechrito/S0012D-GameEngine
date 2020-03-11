@@ -16,15 +16,14 @@ namespace GameEngine
 	public:
 		static int NextID;
 		int UniqueID;
-
 		Util::StringAtom Name;
 
 		BaseEntity();
 
-		bool RegisterVariable(const Util::StringAtom& name, Util::Variant variable, bool overrideExisting = false);
+		bool RegisterVariable(const Util::StringAtom& name, const Util::Variant& variable, bool overrideExisting = false);
 		bool RegisterComponent(Component* component);
 
-		Component* GetComponent(Util::StringAtom name);
+		Component* GetComponent(const Util::StringAtom& name);
 		
 		void HandleMessage(const Telegram& msg);
 		

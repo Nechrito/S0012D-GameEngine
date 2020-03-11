@@ -5,8 +5,7 @@
 
 namespace GameEngine
 {
-	
-	__ImplementClass(GameEngine::BaseEntity, 'GEBE', Core::RefCounted)
+	__ImplementClass(BaseEntity, 'GEBE', Core::RefCounted)
 
 	int BaseEntity::NextID = 0;
 
@@ -16,7 +15,7 @@ namespace GameEngine
 		NextID = UniqueID + 1;
 	}
 
-	bool BaseEntity::RegisterVariable(const Util::StringAtom& name, const Util::Variant variable, const bool overrideExisting)
+	bool BaseEntity::RegisterVariable(const Util::StringAtom& name, const Util::Variant& variable, const bool overrideExisting)
 	{
 		if (Variables.Contains(name))
 		{
@@ -33,7 +32,7 @@ namespace GameEngine
 
 	bool BaseEntity::RegisterComponent(Component* component)
 	{
-		auto existingComponent = Components.Find(component);
+		const auto existingComponent = Components.Find(component);
 		
 		if (component == nullptr || existingComponent != nullptr)
 		{
@@ -48,7 +47,7 @@ namespace GameEngine
 		return true;
 	}
 
-	Component* BaseEntity::GetComponent(Util::StringAtom name)
+	Component* BaseEntity::GetComponent(const Util::StringAtom& name)
 	{
 		if (Components.Size() > 0 && ComponentsHash.Size() > 0)
 			return Components[ComponentsHash[name]];

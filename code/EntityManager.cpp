@@ -54,6 +54,13 @@ namespace GameEngine
 		Entities.EraseIndexSwap(i);
 	}
 
+	BaseEntity* EntityManager::GetEntity(const Util::StringAtom& name)
+	{
+		if (Entities.Size() > 0 && EntityTable.Size() > 0)
+			return Entities[EntityTable[name]];
+		return nullptr;
+	}
+
 	BaseEntity* EntityManager::GetEntity(int id)
 	{
 		return nullptr;

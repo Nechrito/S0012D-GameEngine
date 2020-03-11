@@ -31,6 +31,7 @@
 #include "EntityManager.h"
 #include "BaseEntity.h"
 #include "GameTime.h"
+#include "TransformComponent.h"
 
 
 #ifdef __WIN32__
@@ -276,6 +277,14 @@ namespace GameEngine
             // put game code which doesn't need visibility data or animation here
             EntityManager::Instance()->Update();
 
+            BaseEntity* entity1 = EntityManager::Instance()->GetEntity("catapult");
+        	if (entity1)
+        	{
+                TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
+        		if (entityTransform)
+					entityTransform->SetPosition(Math::point(0, 0, -100));
+        	}
+        	
             this->gfxServer->BeforeViews();
 
             this->RenderUI();
