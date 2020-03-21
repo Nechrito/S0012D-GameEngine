@@ -30,6 +30,7 @@ namespace GameEngine
 	private:
 		Util::Array<BaseEntity*> Entities;
 		Util::HashTable<Util::StringAtom, IndexT> EntityTable;
+		Util::HashTable<IndexT, IndexT> EntityTableI;
 	};
 }
 

@@ -32,6 +32,7 @@
 #include "BaseEntity.h"
 #include "GameTime.h"
 #include "TransformComponent.h"
+#include "TestEnvironment.h"
 
 
 #ifdef __WIN32__
@@ -155,10 +156,9 @@ namespace GameEngine
 
             GameTime::Create();
             MessageDispatcher::Create();
-        	EntityManager::Create();
-
-        	EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
-            EntityManager::Instance()->RegisterEntity("catapult", "mdl:Units/Unit_Catapult.n3", "Examples", Math::point(0, -50, 3));
+            TestEnvironment::Create();
+        	
+            TestEnvironment::Instance()->Initialize();
 
             // Camera entity
             Graphics::RegisterEntity<CameraContext, ObserverContext>(this->cam);
@@ -203,6 +203,10 @@ namespace GameEngine
 
     void Engine::Close()
     {
+
+        TestEnvironment::Instance()->Unload();
+
+    	
         Application::Close();
         DestroyWindow(this->wnd);
         this->gfxServer->DiscardStage(this->stage);
@@ -238,7 +242,6 @@ namespace GameEngine
         this->coreServer->Close();
         this->coreServer = nullptr;
 
-        EntityManager::Instance()->Shutdown();
     }
 
     void Engine::Run()
@@ -275,15 +278,8 @@ namespace GameEngine
             this->gfxServer->BeginFrame();
 
             // put game code which doesn't need visibility data or animation here
-            EntityManager::Instance()->Update();
-
-            BaseEntity* entity1 = EntityManager::Instance()->GetEntity("catapult");
-        	if (entity1)
-        	{
-                TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
-        		if (entityTransform)
-					entityTransform->SetPosition(Math::point(0, 0, -100));
-        	}
+            TestEnvironment::Instance()->Update();
+            
         	
             this->gfxServer->BeforeViews();
 

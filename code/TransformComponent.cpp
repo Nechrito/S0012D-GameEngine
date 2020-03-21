@@ -35,7 +35,7 @@ namespace GameEngine
 
 	void TransformComponent::Translate(Math::float4 position)
 	{
-		Velocity += DirectX::XMVector4Normalize((position - Velocity).vec);
+		Velocity += (position - Velocity).vec; //DirectX::XMVector4Normalize();
 	}
 
 	void TransformComponent::SetPosition(Math::float4 position)

@@ -44,7 +44,6 @@ namespace GameEngine
 
 		Entities.Append(entity);
 		EntityTable.Add(name, Entities.Size());
-
 	}
 
 	void EntityManager::RemoveEntity(BaseEntity* entity)
@@ -56,13 +55,28 @@ namespace GameEngine
 
 	BaseEntity* EntityManager::GetEntity(const Util::StringAtom& name)
 	{
-		if (Entities.Size() > 0 && EntityTable.Size() > 0)
-			return Entities[EntityTable[name]];
+		for (auto entity : Entities)
+		{
+			if (entity->Name == name)
+			{
+				return entity;
+			}
+		}
+		
+		//if (Entities.Size() > 0 && EntityTable.Size() > 0)
+			//return Entities[EntityTable[name]];
 		return nullptr;
 	}
 
 	BaseEntity* EntityManager::GetEntity(int id)
 	{
+		for (auto entity : Entities)
+		{
+			if (entity->UniqueID == id)
+			{
+				return entity;
+			}
+		}
 		return nullptr;
 	}
 
