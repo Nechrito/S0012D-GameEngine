@@ -1,3 +1,5 @@
+![](showcase1.gif)
+
 ## Requirements
 1. OS: Windows or Linux
 2. Compiler with support for C++17.

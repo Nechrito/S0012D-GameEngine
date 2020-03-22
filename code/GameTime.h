@@ -2,6 +2,7 @@
 #include "stdneb.h"
 #include "core/refcounted.h"
 #include "core/singleton.h"
+#include <chrono>
 
 namespace GameEngine
 {
@@ -9,25 +10,28 @@ namespace GameEngine
 	{
 		__DeclareClass(GameTime)
 		__DeclareSingleton(GameTime)
+		
 	public:
 		double deltaTime;
 		double fixedDeltaTime;
+		int timeScale;
 		float ticks;
-		float timeScale;
-		
+
 		GameTime();
 		~GameTime();
 		
 		void Update();
 
 		/* Framecounter */
-		void TimerStart();
-		void TimerStop();
+		std::chrono::steady_clock::time_point TimerStart();
+		double TimerStop(const std::chrono::steady_clock::time_point& start) const;
 		int TimerResult() const;
 		
 	private:
-		long count;
+		typedef std::chrono::high_resolution_clock Clock;
+		clock_t timerStart;
+		int count;
 		int frames;
-		int lastFrameTick;
+		float lastFrameTick;
 	};
 }

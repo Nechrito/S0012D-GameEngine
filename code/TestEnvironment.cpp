@@ -40,7 +40,12 @@ namespace GameEngine
 			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
 			if (entityTransform)
 			{
-				entityTransform->Translate(Math::point(0, 0, 0.005));
+				auto dt = GameTime::Instance()->deltaTime;
+				t += dt;
+
+				auto moveSpeed = sin(t * 3.1415 * 0.5f);
+				
+				entityTransform->Translate(Math::point(0, -moveSpeed * dt, 0));
 				entityTransform->Rotate(0, 1, 0, 0.01);
 			}
 		}

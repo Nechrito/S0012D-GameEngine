@@ -22,6 +22,9 @@ namespace GameEngine
 
 
 	private:
+
+		float t = 0;
+		float s = 0;
 		
 	};
 }
