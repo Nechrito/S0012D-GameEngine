@@ -24,7 +24,7 @@ namespace GameEngine
 		EntityTable.Add(entity->Name, Entities.Size());
 	}
 
-	void EntityManager::RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri, const Util::StringAtom& tag, const Math::point& position)
+	BaseEntity* EntityManager::RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri, const Util::StringAtom& tag, const Math::point& position)
 	{
 		BaseEntity* entity = BaseEntity::Create();
 		entity->Name = name;
@@ -44,6 +44,8 @@ namespace GameEngine
 
 		Entities.Append(entity);
 		EntityTable.Add(name, Entities.Size());
+
+		return entity;
 	}
 
 	void EntityManager::RemoveEntity(BaseEntity* entity)

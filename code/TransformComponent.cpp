@@ -52,7 +52,7 @@ namespace GameEngine
 
 	void TransformComponent::SetPosition(const Math::float4 position)
 	{
-		Transform.setposition(position);
+		Velocity = position; 
 	}
 
 	void TransformComponent::SetRotation(const float x, const float y, const float z)

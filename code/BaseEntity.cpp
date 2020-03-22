@@ -64,9 +64,10 @@ namespace GameEngine
 
 	void BaseEntity::Init()
 	{
-		for (Component* component : Components)
+		for (auto& component : Components)
 		{
-			component->Init();
+			if (component)
+				component->Init();
 		}
 	}
 

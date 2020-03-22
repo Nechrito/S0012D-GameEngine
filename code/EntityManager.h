@@ -17,7 +17,8 @@ namespace GameEngine
 		~EntityManager();
 		
 		void RegisterEntity(BaseEntity* entity);
-		void RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri, const Util::StringAtom& tag, const Math::point& position = Math::point());
+		BaseEntity* RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri,
+		                           const Util::StringAtom& tag, const Math::point& position = Math::point());
 
 		void RemoveEntity(BaseEntity* entity);
 		BaseEntity* GetEntity(const Util::StringAtom& name);

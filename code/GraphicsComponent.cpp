@@ -13,7 +13,7 @@ namespace GameEngine
 	{
 		Models::ModelContext::Setup(ID, resource, tag);
 		Visibility::ObservableContext::Setup(ID, Visibility::Model);
-
+		
 		if (Owner != nullptr)
 		{
 			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(Owner->GetComponent("Transform"));
