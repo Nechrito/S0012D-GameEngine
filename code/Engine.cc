@@ -28,10 +28,6 @@
 #include "io/fswrapper.h"
 #include "system/nebulasettings.h"
 #include "profiling/profiling.h"
-#include "EntityManager.h"
-#include "BaseEntity.h"
-#include "GameTime.h"
-#include "TransformComponent.h"
 #include "TestEnvironment.h"
 
 
@@ -154,10 +150,8 @@ namespace GameEngine
             ObserverContext::Create();
             ObservableContext::Create();
 
-            GameTime::Create();
-            MessageDispatcher::Create();
+            
             TestEnvironment::Create();
-        	
             TestEnvironment::Instance()->Initialize();
 
             // Camera entity

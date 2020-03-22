@@ -2,6 +2,7 @@
 #include "TransformComponent.h"
 #include "EntityManager.h"
 #include "BaseEntity.h"
+#include "GameTime.h"
 
 namespace GameEngine
 {
@@ -20,13 +21,17 @@ namespace GameEngine
 
 	void TestEnvironment::Initialize()
 	{
+		GameTime::Create();
+		MessageDispatcher::Create();
 		EntityManager::Create();
+
 		EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
 		EntityManager::Instance()->RegisterEntity("catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
 	}
 
 	void TestEnvironment::Update()
 	{
+		GameTime::Instance()->Update();
 		EntityManager::Instance()->Update();
 
 		BaseEntity* entity1 = EntityManager::Instance()->GetEntity("catapult");
@@ -34,7 +39,10 @@ namespace GameEngine
 		{
 			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
 			if (entityTransform)
-				entityTransform->Translate(Math::point(0, 0, -10));
+			{
+				entityTransform->Translate(Math::point(0, 0, 0.005));
+				entityTransform->Rotate(0, 1, 0, 0.01);
+			}
 		}
 	}
 

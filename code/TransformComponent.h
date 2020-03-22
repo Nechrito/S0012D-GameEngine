@@ -10,8 +10,12 @@ namespace GameEngine
 		__DeclareClass(GameEngine::TransformComponent)
 
 	public:
+
+		enum class Orientation { X, Y, Z };
+		
 		Math::float4 Velocity;
 		Math::transform44 Transform;
+		Math::quaternion  Rotation;
 
 		void Init() override;
 		void Update() override;
@@ -19,7 +23,8 @@ namespace GameEngine
 		bool HandleMessage(const Telegram& msg) override;
 
 		void Translate(Math::float4 position);
-		
+		void Rotate(float x, float y, float z, float angle);
+
 		void SetPosition(Math::float4 position);
 		void SetRotation(float x, float y, float z);
 		void SetScale(Math::float4 scale);

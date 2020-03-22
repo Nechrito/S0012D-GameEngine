@@ -20,10 +20,10 @@ namespace GameEngine
 		count += 1;
 		frames += 1;
 
-		ticks = GetTickCount64();
+		ticks = GetTickCount();
 		
-		deltaTime = fixedDeltaTime = ((ticks - lastFrameTick) / 1000);
-		deltaTime *= timeScale;
+		fixedDeltaTime = (ticks - lastFrameTick) / 1000;
+		deltaTime = fixedDeltaTime * timeScale;
 
 		lastFrameTick = ticks;
 	}

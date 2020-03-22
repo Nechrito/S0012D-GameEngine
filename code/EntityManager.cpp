@@ -55,7 +55,7 @@ namespace GameEngine
 
 	BaseEntity* EntityManager::GetEntity(const Util::StringAtom& name)
 	{
-		for (auto entity : Entities)
+		for (auto& entity : Entities)
 		{
 			if (entity->Name == name)
 			{
