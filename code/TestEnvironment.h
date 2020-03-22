@@ -17,7 +17,6 @@ namespace GameEngine
 
 		void Initialize();
 		void Update();
-		void Draw();
 		void Unload();
 
 

@@ -25,8 +25,9 @@ namespace GameEngine
 		MessageDispatcher::Create();
 		EntityManager::Create();
 
-		EntityManager::Instance()->RegisterEntity("ground", "mdl:environment/Groundplane.n3", "Examples");
-		EntityManager::Instance()->RegisterEntity("catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
+		EntityManager::Instance()->RegisterEntity("Ground", "mdl:environment/Groundplane.n3", "Examples");
+		EntityManager::Instance()->RegisterEntity("Catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
+		EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples");
 	}
 
 	void TestEnvironment::Update()
@@ -34,7 +35,7 @@ namespace GameEngine
 		GameTime::Instance()->Update();
 		EntityManager::Instance()->Update();
 
-		BaseEntity* entity1 = EntityManager::Instance()->GetEntity("catapult");
+		BaseEntity* entity1 = EntityManager::Instance()->GetEntity("Catapult");
 		if (entity1)
 		{
 			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
@@ -49,11 +50,6 @@ namespace GameEngine
 				entityTransform->Rotate(0, 1, 0, 0.01);
 			}
 		}
-	}
-
-	void TestEnvironment::Draw()
-	{
-		
 	}
 
 	void TestEnvironment::Unload()
