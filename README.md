@@ -1,4 +1,4 @@
-![](showcase1.gif)
+![](showcase.gif)
 
 ## Requirements
 1. OS: Windows or Linux
