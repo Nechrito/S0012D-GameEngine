@@ -20,8 +20,8 @@ namespace GameEngine
 
 	void EntityManager::RegisterEntity(BaseEntity* entity)
 	{
-		Entities.Append(entity);
-		EntityTable.Add(entity->Name, Entities.Size());
+		entities.Append(entity);
+		entityTable.Add(entity->Name, entities.Size());
 	}
 
 	BaseEntity* EntityManager::RegisterEntity(const Util::StringAtom& name, const Resources::ResourceName& uri, const Util::StringAtom& tag, const Math::point& position)
@@ -42,37 +42,38 @@ namespace GameEngine
 		entity->RegisterComponent(transform);
 		entity->RegisterComponent(graphics);
 
-		Entities.Append(entity);
-		EntityTable.Add(name, Entities.Size());
+		const size_t index = entities.Size();
+		
+		entities.Append(entity);
+		entityTable.Add(name, index);
 
 		return entity;
 	}
 
 	void EntityManager::RemoveEntity(BaseEntity* entity)
 	{
-		const IndexT i = EntityTable[entity->Name];
-		EntityTable.Erase(entity->Name);
-		Entities.EraseIndexSwap(i);
+		const IndexT i = entityTable[entity->Name];
+		entityTable.Erase(entity->Name);
+		entities.EraseIndexSwap(i);
 	}
 
 	BaseEntity* EntityManager::GetEntity(const Util::StringAtom& name)
 	{
-		for (auto& entity : Entities)
+		try
 		{
-			if (entity->Name == name)
-			{
-				return entity;
-			}
+			return entities[entityTable[name]];
 		}
-		
-		//if (Entities.Size() > 0 && EntityTable.Size() > 0)
-			//return Entities[EntityTable[name]];
-		return nullptr;
+		catch (...)
+		{
+			n_printf("Failed to get %s", name.Value());
+			return nullptr;
+		}
 	}
 
 	BaseEntity* EntityManager::GetEntity(int id)
 	{
-		for (auto entity : Entities)
+		// todo: implement 'IndexT HashCode() const' for O(1) lookup time 
+		for (auto entity : entities)
 		{
 			if (entity->UniqueID == id)
 			{
@@ -84,25 +85,28 @@ namespace GameEngine
 
 	void EntityManager::Init()
 	{
-		for (BaseEntity* entity : Entities)
+		for (BaseEntity*& entity : entities)
 		{
-			entity->Init();
+			if (entity)
+				entity->Init();
 		}
 	}
 
 	void EntityManager::Update()
 	{
-		for (BaseEntity* entity : Entities)
+		for (BaseEntity*& entity : entities)
 		{
-			entity->Update();
+			if (entity)
+				entity->Update();
 		}
 	}
 
 	void EntityManager::Shutdown()
 	{
-		for (BaseEntity* entity : Entities)
+		for (BaseEntity*& entity : entities)
 		{
-			entity->Shutdown();
+			if (entity)
+				entity->Shutdown();
 		}
 	}
 }

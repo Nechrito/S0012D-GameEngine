@@ -31,7 +31,7 @@ namespace GameEngine
 		EntityManager::Instance()->RegisterEntity("Catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
 		EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples", Math::point(5, 0, 0));
 
-		EntityManager::Instance()->Init();
+		//EntityManager::Instance()->Init();
 	}
 
 	void TestEnvironment::Update()
@@ -45,10 +45,10 @@ namespace GameEngine
 			TransformComponent* entityTransform = dynamic_cast<TransformComponent*>(entity1->GetComponent("Transform"));
 			if (entityTransform)
 			{
-				auto dt = GameTime::Instance()->deltaTime;
+				const double dt = GameTime::Instance()->deltaTime;
 				t += dt;
 
-				auto moveSpeed = sinf(t * 3.1415);
+				const float moveSpeed = sinf(t * 3.1415);
 				
 				entityTransform->Translate(Math::point(0, -moveSpeed * dt, 0));
 				entityTransform->Rotate(0, 1, 0, 0.01);

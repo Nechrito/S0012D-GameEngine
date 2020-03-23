@@ -56,7 +56,7 @@ namespace GameEngine
 
 	void BaseEntity::HandleMessage(const Telegram& msg)
 	{
-		for (Component* component : Components)
+		for (auto& component : Components)
 		{
 			component->HandleMessage(msg);
 		}
@@ -73,7 +73,7 @@ namespace GameEngine
 
 	void BaseEntity::Update()
 	{
-		for (Component* component : Components)
+		for (auto& component : Components)
 		{
 			component->Update();
 		}
@@ -81,7 +81,7 @@ namespace GameEngine
 
 	void BaseEntity::Shutdown()
 	{
-		for (Component* component : Components)
+		for (auto& component : Components)
 		{
 			component->Shutdown();
 		}

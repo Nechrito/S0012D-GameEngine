@@ -29,9 +29,8 @@ namespace GameEngine
 		void Shutdown();
 		
 	private:
-		Util::Array<BaseEntity*> Entities;
-		Util::HashTable<Util::StringAtom, IndexT> EntityTable;
-		Util::HashTable<IndexT, IndexT> EntityTableI;
+		Util::Array<BaseEntity*> entities;
+		Util::HashTable<Util::StringAtom, IndexT> entityTable;
 	};
 }
 
