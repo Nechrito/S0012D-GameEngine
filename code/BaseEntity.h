@@ -33,9 +33,8 @@ namespace GameEngine
 
 	private:
 		
-		/// storing mechanism 
-		Util::Array<Component*> Components;
-		Util::HashTable<Util::StringAtom, IndexT> ComponentsHash;
-		Util::HashTable<Util::StringAtom, Util::Variant> Variables;
+		Util::Array<Component*> components;
+		Util::HashTable<Util::StringAtom, IndexT> componentsTable;
+		Util::HashTable<Util::StringAtom, Util::Variant> variables;
 	};
 }

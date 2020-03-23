@@ -17,52 +17,56 @@ namespace GameEngine
 
 	bool BaseEntity::RegisterVariable(const Util::StringAtom& name, const Util::Variant& variable, const bool overrideExisting)
 	{
-		if (Variables.Contains(name))
+		if (variables.Contains(name))
 		{
 			if (!overrideExisting)
 				return false;
 
-			Variables[name] = variable;
+			variables[name] = variable;
 		}
 		
-		Variables.Add(name, variable);
+		variables.Add(name, variable);
 
 		return true;
 	}
 
 	bool BaseEntity::RegisterComponent(Component* component)
 	{
-		const auto existingComponent = Components.Find(component);
+		const auto existingComponent = components.Find(component);
 		
 		if (component == nullptr || existingComponent != nullptr)
 		{
 			return false;
 		}
 
-		if (!ComponentsHash.Contains(component->GetType()))
-			ComponentsHash.Add(component->GetType(), Components.Size());
+		if (!componentsTable.Contains(component->GetType()))
+			componentsTable.Add(component->GetType(), components.Size());
 
-		Components.Append(component);
+		components.Append(component);
 
 		return true;
 	}
 
 	Component* BaseEntity::GetComponent(const Util::StringAtom& name)
 	{
-		try
+		if (components.Size() > 0)
 		{
-			return Components[ComponentsHash[name]];
+			try
+			{
+				return components[componentsTable[name]];
+			}
+			catch (...)
+			{
+				n_printf("[Component] Failed to get %s", name.Value());
+			}
 		}
-		catch (...)
-		{
-			n_printf("[Component] Failed to get %s", name.Value());
-			return nullptr;
-		}
+		
+		return nullptr;
 	}
 
 	void BaseEntity::HandleMessage(const Telegram& msg)
 	{
-		for (auto& component : Components)
+		for (auto& component : components)
 		{
 			component->HandleMessage(msg);
 		}
@@ -70,7 +74,7 @@ namespace GameEngine
 
 	void BaseEntity::Init()
 	{
-		for (auto& component : Components)
+		for (auto& component : components)
 		{
 			if (component)
 				component->Init();
@@ -79,7 +83,7 @@ namespace GameEngine
 
 	void BaseEntity::Update()
 	{
-		for (auto& component : Components)
+		for (auto& component : components)
 		{
 			component->Update();
 		}
@@ -87,7 +91,7 @@ namespace GameEngine
 
 	void BaseEntity::Shutdown()
 	{
-		for (auto& component : Components)
+		for (auto& component : components)
 		{
 			component->Shutdown();
 		}
