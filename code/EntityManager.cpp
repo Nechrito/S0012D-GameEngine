@@ -65,7 +65,7 @@ namespace GameEngine
 		}
 		catch (...)
 		{
-			n_printf("Failed to get %s", name.Value());
+			n_printf("[Entity] Failed to get %s", name.Value());
 			return nullptr;
 		}
 	}

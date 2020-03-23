@@ -49,9 +49,15 @@ namespace GameEngine
 
 	Component* BaseEntity::GetComponent(const Util::StringAtom& name)
 	{
-		if (Components.Size() > 0 && ComponentsHash.Size() > 0)
+		try
+		{
 			return Components[ComponentsHash[name]];
-		return nullptr;
+		}
+		catch (...)
+		{
+			n_printf("[Component] Failed to get %s", name.Value());
+			return nullptr;
+		}
 	}
 
 	void BaseEntity::HandleMessage(const Telegram& msg)
