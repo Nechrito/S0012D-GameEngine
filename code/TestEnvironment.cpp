@@ -6,6 +6,7 @@
 #include "TransformComponent.h"
 #include "BaseEntity.h"
 #include "scripting/python/pythonserver.h"
+#include "PyScripting.h"
 
 
 namespace GameEngine
@@ -36,7 +37,11 @@ namespace GameEngine
 		//EntityManager::Instance()->Init();
 
 		// Scripting
-		Scripting::PythonServer::Create();
+		Scripting::PythonServer* pyServer = Scripting::PythonServer::Create();
+		pyServer->Open();
+
+		const Util::String uri("root:code/PythonScript.py");
+		pyServer->EvalFile(uri);
 	}
 
 	void TestEnvironment::Update()

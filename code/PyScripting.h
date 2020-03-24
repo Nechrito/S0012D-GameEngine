@@ -1,19 +1,24 @@
 #pragma once
 
-#include <pybind11/pybind11.h>
+#include "pybind11/embed.h"
 
 namespace py = pybind11;
 
-class PyScripting
+namespace GameEngine
 {
-public:
+	class PyScripting
+	{
+	public:
 
-	PyScripting();
-	~PyScripting();
+		PyScripting();
+		~PyScripting();
 
-	
+		static int add(int i, int j);
+		static void log(Util::StringAtom msg);
 
-private:
-	
-};
 
+	private:
+		
+
+	};
+}
