@@ -1,3 +1,4 @@
+#include "stdneb.h"
 #include "MessageDispatcher.h"
 #include "BaseEntity.h"
 #include "EntityManager.h"

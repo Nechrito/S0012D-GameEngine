@@ -1,9 +1,11 @@
+#include "stdneb.h"
 #include "TestEnvironment.h"
 #include "GameTime.h"
 #include "MessageDispatcher.h"
 #include "EntityManager.h"
 #include "TransformComponent.h"
 #include "BaseEntity.h"
+#include "scripting/python/pythonserver.h"
 
 
 namespace GameEngine
@@ -32,6 +34,9 @@ namespace GameEngine
 		EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples", Math::point(5, 0, 0));
 
 		//EntityManager::Instance()->Init();
+
+		// Scripting
+		Scripting::PythonServer::Create();
 	}
 
 	void TestEnvironment::Update()

@@ -1,5 +1,4 @@
 #pragma once
-#include "stdneb.h"
 #include "core/refcounted.h"
 #include "core/singleton.h"
 

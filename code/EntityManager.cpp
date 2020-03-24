@@ -1,3 +1,4 @@
+#include "stdneb.h"
 #include "EntityManager.h"
 #include "BaseEntity.h"
 #include "TransformComponent.h"
@@ -70,7 +71,7 @@ namespace GameEngine
 		}
 	}
 
-	BaseEntity* EntityManager::GetEntity(int id)
+	BaseEntity* EntityManager::GetEntity(const int id)
 	{
 		// todo: implement 'IndexT HashCode() const' for O(1) lookup time 
 		for (auto entity : entities)

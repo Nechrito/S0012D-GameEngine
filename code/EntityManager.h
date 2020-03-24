@@ -1,5 +1,4 @@
 #pragma once
-#include "stdneb.h"
 #include "MessageDispatcher.h"
 #include "util/stringatom.h"
 #include "resources/resource.h"
@@ -7,7 +6,7 @@
 
 namespace GameEngine
 {
-	class EntityManager : public Core::RefCounted
+	class EntityManager final : public Core::RefCounted
 	{
 		__DeclareClass(EntityManager)
 		__DeclareSingleton(EntityManager)

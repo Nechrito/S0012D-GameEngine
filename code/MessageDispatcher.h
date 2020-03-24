@@ -1,5 +1,4 @@
 #pragma once
-#include "stdneb.h"
 #include "util/queue.h"
 #include "Telegram.h"
 #include "core/refcounted.h"

@@ -1,3 +1,4 @@
+#include "stdneb.h"
 #include "BaseEntity.h"
 #include <cassert>
 #include "Telegram.h"

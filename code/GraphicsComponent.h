@@ -1,5 +1,4 @@
 #pragma once
-#include "stdneb.h"
 #include "Component.h"
 #include "core/rttimacros.h"
 #include "core/refcounted.h"

@@ -1,3 +1,4 @@
+#include "stdneb.h"
 #include "GraphicsComponent.h"
 #include "graphics/graphicsserver.h"
 #include "models/modelcontext.h"

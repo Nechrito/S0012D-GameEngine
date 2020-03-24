@@ -1,3 +1,4 @@
+#include "stdneb.h"
 #include "TransformComponent.h"
 #include "BaseEntity.h"
 #include "GameTime.h"

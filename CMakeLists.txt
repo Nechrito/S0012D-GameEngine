@@ -11,7 +11,7 @@ nebula_begin_app(GameEngine windowed)
     
     fips_dir(code)
         fips_files(
-            main.cc
+           main.cc
            Engine.cc
 		   Engine.h
 		   BaseEntity.cpp
@@ -27,6 +27,10 @@ nebula_begin_app(GameEngine windowed)
 		   MessageDispatcher.h
 		   Telegram.cpp
 		   Telegram.h
+		   TestEnvironment.cpp
+		   TestEnvironment.h
+		   Scripting.cpp
+		   Scripting.h
 		   TransformComponent.cpp
 		   TransformComponent.h
         )
