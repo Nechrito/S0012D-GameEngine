@@ -31,6 +31,7 @@ nebula_begin_app(GameEngine windowed)
 		   TestEnvironment.h
 		   PyScripting.cpp
 		   PyScripting.h
+		   PythonScript.py
 		   TransformComponent.cpp
 		   TransformComponent.h
         )

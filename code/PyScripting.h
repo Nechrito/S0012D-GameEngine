@@ -13,8 +13,9 @@ namespace GameEngine
 		PyScripting();
 		~PyScripting();
 
-		static int add(int i, int j);
-		static void log(Util::StringAtom msg);
+		static void log(const Util::StringAtom& msg);
+
+		static void setAttribute(const Util::StringAtom& entityName, const Util::StringAtom& attributeName, const Util::Variant& variable);
 
 
 	private:

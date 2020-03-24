@@ -32,7 +32,7 @@ namespace GameEngine
 
 		EntityManager::Instance()->RegisterEntity("Ground", "mdl:environment/Groundplane.n3", "Examples");
 		EntityManager::Instance()->RegisterEntity("Catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
-		EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples", Math::point(5, 0, 0));
+		//EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples", Math::point(5, 0, 0));
 
 		//EntityManager::Instance()->Init();
 
