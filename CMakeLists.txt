@@ -29,8 +29,8 @@ nebula_begin_app(GameEngine windowed)
 		   Telegram.h
 		   TestEnvironment.cpp
 		   TestEnvironment.h
-		   Scripting.cpp
-		   Scripting.h
+		   PyScripting.cpp
+		   PyScripting.h
 		   TransformComponent.cpp
 		   TransformComponent.h
         )

@@ -2,12 +2,14 @@
 
 #include <pybind11/pybind11.h>
 
-class Scripting
+namespace py = pybind11;
+
+class PyScripting
 {
 public:
 
-	Scripting();
-	~Scripting();
+	PyScripting();
+	~PyScripting();
 
 	
 
