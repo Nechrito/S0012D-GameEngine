@@ -50,17 +50,17 @@ namespace GameEngine
 
 		
 		// Entity
-		py::class_<BaseEntity>(m, "BaseEntity")
-			.def("Transform", [](BaseEntity* e) { return dynamic_cast<TransformComponent*>(e->GetComponent("Transform")); })
-			.def("Graphics", [](BaseEntity* e) { return dynamic_cast<GraphicsComponent*>(e->GetComponent("Graphics")); })
-			.def("RegisterVariable", py::overload_cast<const Util::StringAtom&, const Util::Variant&, bool>(&BaseEntity::RegisterVariable),
-				py::arg("name"), py::arg("variable"), py::arg("overrideExisting"), reference)
-			.def("RegisterComponent", py::overload_cast<Component*>, py::arg("component"), reference)
-			.def("GetComponent", py::overload_cast<const Util::StringAtom&>, py::arg("name"), reference)
-			.def("HandleMessage", py::overload_cast<const Telegram&>, py::arg("msg"), reference)
-			.def("Init", &BaseEntity::Init, reference)
-			.def("Update", &BaseEntity::Update, reference)
-			.def("Shutdown", &BaseEntity::Shutdown, reference);
+		//py::class_<BaseEntity>(m, "BaseEntity")
+		//	.def("Transform", [](BaseEntity* e) { return dynamic_cast<TransformComponent*>(e->GetComponent("Transform")); })
+		//	.def("Graphics", [](BaseEntity* e) { return dynamic_cast<GraphicsComponent*>(e->GetComponent("Graphics")); })
+		//	.def("RegisterVariable", py::overload_cast<const Util::StringAtom&, const Util::Variant&, bool>(&BaseEntity::RegisterVariable),
+		//		py::arg("name"), py::arg("variable"), py::arg("overrideExisting"), reference)
+		//	.def("RegisterComponent", py::overload_cast<Component*>, py::arg("component"), reference)
+		//	.def("GetComponent", py::overload_cast<const Util::StringAtom&>, py::arg("name"), reference)
+		//	.def("HandleMessage", py::overload_cast<const Telegram&>, py::arg("msg"), reference)
+		//	.def("Init", &BaseEntity::Init, reference)
+		//	.def("Update", &BaseEntity::Update, reference)
+		//	.def("Shutdown", &BaseEntity::Shutdown, reference);
 
 		// Component - Transform
 		
