@@ -40,9 +40,9 @@ namespace GameEngine
 		return true;
 	}
 
-	void TransformComponent::Translate(const Math::float4 position)
+	void TransformComponent::Translate(const Math::float4 direction)
 	{
-		Velocity += position;
+		Velocity += direction;
 	}
 
 	void TransformComponent::Rotate(float x, float y, float z, float angle)

@@ -58,14 +58,36 @@ namespace GameEngine
 					py::arg("name"), py::arg("variable"), py::arg("overrideExisting"), reference)
 				.def("Init", &BaseEntity::Init, reference)
 				.def("Update", &BaseEntity::Update, reference)
-				.def("Shutdown", &BaseEntity::Shutdown, reference);
+				.def("Shutdown", &BaseEntity::Shutdown, reference)
 			;
-		// Component - Transform
 		
-
+		// Component - Transform
+		py::class_<TransformComponent>(m, "TransformComponent")
+			.def("Init", &TransformComponent::Init, reference)
+			.def("Update", &TransformComponent::Update, reference)
+			.def("Shutdown", &TransformComponent::Shutdown, reference)
+		
+			.def("Translate", py::overload_cast<Math::float4>(&TransformComponent::Translate), py::arg("direction"), reference)
+		
+			.def("Rotate", py::overload_cast<float, float, float, float>(&TransformComponent::Rotate),
+				py::arg("x"), py::arg("y"), py::arg("z"), py::arg("angle"), reference)
+		
+			.def("SetPosition", py::overload_cast<Math::float4>(&TransformComponent::SetPosition), py::arg("position"), reference)
+		
+			.def("SetRotation", py::overload_cast<float, float, float>(&TransformComponent::SetRotation), 
+				py::arg("x"), py::arg("y"), py::arg("z"), reference)
+		
+			.def("SetScale", py::overload_cast<Math::float4>(&TransformComponent::SetScale), py::arg("scale"), reference)
+			;
 		
 		// Component - Graphics
-
+		py::class_<GraphicsComponent>(m, "GraphicsComponent")
+			.def("Init", &GraphicsComponent::Init, reference)
+			.def("Update", &GraphicsComponent::Update, reference)
+			.def("Shutdown", &GraphicsComponent::Shutdown, reference)
+			.def("Load", py::overload_cast<const Resources::ResourceName&, const Util::StringAtom&>(&GraphicsComponent::Load), 
+			py::arg("resource"), py::arg("tag"), reference)
+			;
 		
 	}
 }

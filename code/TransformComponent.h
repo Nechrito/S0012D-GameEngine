@@ -21,7 +21,7 @@ namespace GameEngine
 		void Shutdown() override;
 		bool HandleMessage(const Telegram& msg) override;
 
-		void Translate(Math::float4 position);
+		void Translate(Math::float4 direction);
 		void Rotate(float x, float y, float z, float angle);
 
 		void SetPosition(Math::float4 position);
