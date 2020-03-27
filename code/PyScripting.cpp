@@ -35,10 +35,10 @@ namespace GameEngine
 
 		// EntityManager
 		// todo: Ptr<...> instead? https://pybind11.readthedocs.io/en/stable/advanced/smart_ptrs.html
-		py::class_ <EntityManager, std::unique_ptr<EntityManager>> (m, "EntityManager")
+		py::class_ <EntityManager, std::unique_ptr<EntityManager, py::nodelete>> (m, "EntityManager")
 		.def(py::init([]()
 		{
-			return std::unique_ptr<EntityManager>(EntityManager::Instance());
+			return std::unique_ptr<EntityManager, py::nodelete>(EntityManager::Instance());
 		}), reference)
 		.def("Init", &EntityManager::Init, reference)
 		.def("Update", &EntityManager::Update, reference)
@@ -47,21 +47,19 @@ namespace GameEngine
 			py::arg("name"), py::arg("uri"), py::arg("tag"), py::arg("position"), reference)
 		.def("GetEntity", py::overload_cast<const Util::StringAtom&>(&EntityManager::GetEntity), py::arg("name"), reference)
 		.def("GetEntity", py::overload_cast<int>(&EntityManager::GetEntity), py::arg("id"), reference);
-
 		
 		// Entity
-		//py::class_<BaseEntity>(m, "BaseEntity")
-		//	.def("Transform", [](BaseEntity* e) { return dynamic_cast<TransformComponent*>(e->GetComponent("Transform")); })
-		//	.def("Graphics", [](BaseEntity* e) { return dynamic_cast<GraphicsComponent*>(e->GetComponent("Graphics")); })
-		//	.def("RegisterVariable", py::overload_cast<const Util::StringAtom&, const Util::Variant&, bool>(&BaseEntity::RegisterVariable),
-		//		py::arg("name"), py::arg("variable"), py::arg("overrideExisting"), reference)
-		//	.def("RegisterComponent", py::overload_cast<Component*>, py::arg("component"), reference)
-		//	.def("GetComponent", py::overload_cast<const Util::StringAtom&>, py::arg("name"), reference)
-		//	.def("HandleMessage", py::overload_cast<const Telegram&>, py::arg("msg"), reference)
-		//	.def("Init", &BaseEntity::Init, reference)
-		//	.def("Update", &BaseEntity::Update, reference)
-		//	.def("Shutdown", &BaseEntity::Shutdown, reference);
-
+		py::class_<BaseEntity>(m, "BaseEntity")
+			.def("Transform", [](BaseEntity* e) { return std::unique_ptr<TransformComponent, py::nodelete>
+			(dynamic_cast<TransformComponent*>(e->GetComponent("Transform"))); })
+			.def("Graphics", [](BaseEntity* e) { return std::unique_ptr<GraphicsComponent, py::nodelete>
+			(dynamic_cast<GraphicsComponent*>(e->GetComponent("Graphics"))); })
+				.def("RegisterVariable", py::overload_cast<const Util::StringAtom&, const Util::Variant&, bool>(&BaseEntity::RegisterVariable),
+					py::arg("name"), py::arg("variable"), py::arg("overrideExisting"), reference)
+				.def("Init", &BaseEntity::Init, reference)
+				.def("Update", &BaseEntity::Update, reference)
+				.def("Shutdown", &BaseEntity::Shutdown, reference);
+			;
 		// Component - Transform
 		
 
