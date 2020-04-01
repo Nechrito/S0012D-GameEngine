@@ -56,7 +56,18 @@ namespace GameEngine
 		writer->SetStream(fileStream);
 		writer->Open();
 
-		// todo....
+		// todo: write "Entity" as root with "components" as parent whereas TransformComponent and Graphicscomponent are the children including their properties
+		
+		writer->BeginArray("Entity");
+		writer->BeginArray("components");
+
+		writer->BeginObject("TransformComponent");
+		// todo...
+
+
+		writer->BeginObject("GraphicsComponent");
+		// todo...
+		
 	}
 
 	void JsonParser::Read(const Util::StringAtom& str)
