@@ -44,9 +44,11 @@ namespace GameEngine
 		const Util::String uri("root:code/PythonScript.py");
 		pyServer->EvalFile(uri);
 
-		// Write to cache
-		const Util::Array<BaseEntity*> entities = EntityManager::Instance()->GetAllEntities();
-		JsonParser::Instance()->Write(entities);
+		JsonParser::Instance()->ReadAll(EntityManager::Instance()->GetAllEntities());
+
+		//// Write to cache
+		//const Util::Array<BaseEntity*> entities = EntityManager::Instance()->GetAllEntities();
+		//JsonParser::Instance()->Write(entities);
 	}
 
 	void TestEnvironment::Update()

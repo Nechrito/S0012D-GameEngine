@@ -23,10 +23,25 @@ namespace GameEngine
 		__DestructSingleton
 	}
 
-	void JsonParser::Write(Util::Array<BaseEntity*> entities)
+	Util::String JsonParser::GetFileName(BaseEntity* entity)
 	{
-		writer = IO::JsonWriter::Create();
+		IoInstance = IO::IoServer::Instance();
 		
+		const IO::URI directory = "root:cache";
+		if (!IoInstance->DirectoryExists(directory))
+			IoInstance->CreateDirectoryA(directory);
+
+
+		Util::String fileName(directory.AsString() + "/");
+		fileName.Append(entity->Name.AsString());
+		fileName.AppendInt(entity->UniqueID);
+		fileName.Append(".json");
+		
+		return fileName;
+	}
+
+	void JsonParser::Write(const Util::Array<BaseEntity*>& entities)
+	{
 		for (auto& entity : entities)
 		{
 			Write(entity);
@@ -37,17 +52,8 @@ namespace GameEngine
 	{
 		if (!entity)
 			return;
-		
-		//if (!IoInstance)
-		IoInstance = IO::IoServer::Instance();
-		const IO::URI directory = "root:cache";
-		if (!IoInstance->DirectoryExists(directory))
-			IoInstance->CreateDirectoryA(directory);
 
-		Util::String fileName(directory.AsString() + "/");
-		fileName.Append(entity->Name.AsString());
-		fileName.AppendInt(entity->UniqueID);
-		fileName.Append(".json");
+		const Util::String fileName = GetFileName(entity);
 
 		if (IoInstance->FileExists(fileName))
 			IoInstance->DeleteFile(fileName);
@@ -55,8 +61,9 @@ namespace GameEngine
 		writer = IO::JsonWriter::Create();
 
 		fileStream = IO::FileStream::Create();
-
 		fileStream->SetURI(fileName);
+		fileStream->Open();
+
 		writer->SetStream(fileStream);
 		writer->Open();
 
@@ -64,12 +71,13 @@ namespace GameEngine
 		writer->BeginObject("Entity");
 
 		TransformComponent* transform = dynamic_cast<TransformComponent*>(entity->GetComponent("Transform"));
-		
+		GraphicsComponent* graphics = dynamic_cast<GraphicsComponent*>(entity->GetComponent("Graphics"));
+
+		// transform
 		writer->Add(transform->Transform, "Transform");
 		writer->Add(transform->Velocity, "Velocity");
 
-
-		GraphicsComponent* graphics = dynamic_cast<GraphicsComponent*>(entity->GetComponent("Graphics"));
+		// graphics
 		writer->Add(graphics->Resource.AsString(), "Resource");
 		writer->Add(graphics->ID.id, "Graphics ID");
 
@@ -77,11 +85,43 @@ namespace GameEngine
 		writer->Close();
 	}
 
-	void JsonParser::Read(const Util::StringAtom& str)
+	void JsonParser::ReadAll(const Util::Array<BaseEntity*>& entities)
 	{
-		IoInstance = IO::IoServer::Instance();
+		for (auto& entity : entities)
+		{
+			Read(entity);
+		}
+	}
 
+	BaseEntity* JsonParser::Read(BaseEntity* entity)
+	{
+		const Util::String fileName = GetFileName(entity);
+		if (!IoInstance->FileExists(fileName))
+		{
+			return entity;
+		}
 
+		reader = IO::JsonReader::Create();
+		fileStream = IO::FileStream::Create();
+		fileStream->SetURI(fileName);
+		fileStream->Open();
+
+		reader->SetStream(fileStream);
+		reader->Open();
+		reader->SetToNode("Entity");
+		
+		TransformComponent* transform = dynamic_cast<TransformComponent*>(entity->GetComponent("Transform"));
+		GraphicsComponent* graphics = dynamic_cast<GraphicsComponent*>(entity->GetComponent("Graphics"));
+
+		transform->Transform = reader->GetTransform44("Transform");
+		transform->Velocity = reader->GetFloat4("Velocity");
+
+		graphics->Resource = reader->GetString("Resource");
+		graphics->ID = reader->GetInt("Graphics ID");
+
+		reader->Close();
+		fileStream->Close();
+		
+		return entity;
 	}
 }
-

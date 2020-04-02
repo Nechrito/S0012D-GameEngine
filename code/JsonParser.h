@@ -17,9 +17,14 @@ namespace GameEngine
 		JsonParser();
 		~JsonParser();
 
-		void Write(Util::Array<BaseEntity*> entities);
+		Util::String GetFileName(BaseEntity* entity);
+		
+		void Write(const Util::Array<BaseEntity*>& entities);
 		void Write(BaseEntity* entity);
-		void Read(const Util::StringAtom& str);
+
+		// Sets the entity properties according to cache
+		void ReadAll(const Util::Array<BaseEntity*>& entities);
+		BaseEntity* Read(BaseEntity* entity);
 
 	private:
 		IO::IoServer* IoInstance;

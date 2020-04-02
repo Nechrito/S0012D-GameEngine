@@ -2,7 +2,7 @@
 	"Entity" : {
 		"Transform" : [ 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 
 			0, 0, 1 ],
-		"Velocity" : [ 0, 0, 0, 1 ],
+		"Velocity" : [ 0, 4, 0, 1 ],
 		"Resource" : "mdl:environment/Groundplane.n3",
 		"Graphics ID" : 1
 	}
