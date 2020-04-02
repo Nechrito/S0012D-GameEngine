@@ -12,6 +12,8 @@ namespace GameEngine
 
 	void GraphicsComponent::Load(const Resources::ResourceName& resource, const Util::StringAtom& tag)
 	{
+		this->Resource = resource;
+
 		Models::ModelContext::Setup(ID, resource, tag);
 		Visibility::ObservableContext::Setup(ID, Visibility::Model);
 		
@@ -28,7 +30,7 @@ namespace GameEngine
 		if (Initialized)
 			return;
 		
-		this->SetType("Graphics");
+		this->SetIdentifier("Graphics");
 		ID = Graphics::CreateEntity();
 		Graphics::RegisterEntity<Models::ModelContext, Visibility::ObservableContext>(ID);
 	}

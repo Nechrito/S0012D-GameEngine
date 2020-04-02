@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "TransformComponent.h"
 #include "BaseEntity.h"
+#include "JsonParser.h"
 #include "scripting/python/pythonserver.h"
 #include "PyScripting.h"
 
@@ -29,20 +30,23 @@ namespace GameEngine
 		GameTime::Create();
 		MessageDispatcher::Create();
 		EntityManager::Create();
+		JsonParser::Create();
 
 		// Instantiate a few entities in python script, then move it in C++ down below @Update()
 		EntityManager::Instance()->RegisterEntity("Ground", "mdl:environment/Groundplane.n3", "Examples");
 		//EntityManager::Instance()->RegisterEntity("Catapult", "mdl:Units/Unit_Catapult.n3", "Examples");
 		//EntityManager::Instance()->RegisterEntity("Footman", "mdl:Units/Unit_Footman.n3", "Examples", Math::point(5, 0, 0));
 
-		//EntityManager::Instance()->Init();
-
-		// Scripting
+		// Scripting with Python
 		Scripting::PythonServer* pyServer = Scripting::PythonServer::Create();
 		pyServer->Open();
 
 		const Util::String uri("root:code/PythonScript.py");
 		pyServer->EvalFile(uri);
+
+		// Write to cache
+		const Util::Array<BaseEntity*> entities = EntityManager::Instance()->GetAllEntities();
+		JsonParser::Instance()->Write(entities);
 	}
 
 	void TestEnvironment::Update()
@@ -63,12 +67,20 @@ namespace GameEngine
 				
 				entityTransform->Translate(Math::point(0, -moveSpeed * dt, 0));
 				entityTransform->Rotate(0, 1, 0, 0.01);
+
+				// Can write to objects during runtime 
+				JsonParser::Instance()->Write(entity1);
 			}
 		}
 	}
 
 	void TestEnvironment::Unload()
 	{
+		// Write to cache
+		const Util::Array<BaseEntity*> entities = EntityManager::Instance()->GetAllEntities();
+		JsonParser::Instance()->Write(entities);
+		
+		
 		EntityManager::Instance()->Shutdown();
 	}
 }

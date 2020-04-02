@@ -4,6 +4,10 @@
 #include "io/ioserver.h"
 #include <string>
 
+
+#include "GraphicsComponent.h"
+#include "TransformComponent.h"
+
 namespace GameEngine
 {
 	__ImplementClass(JsonParser, 'GEJP', Core::RefCounted)
@@ -34,47 +38,48 @@ namespace GameEngine
 		if (!entity)
 			return;
 		
-		if (!IoInstance)
-			IoInstance = IO::IoServer::Instance();
+		//if (!IoInstance)
+		IoInstance = IO::IoServer::Instance();
+		const IO::URI directory = "root:cache";
+		if (!IoInstance->DirectoryExists(directory))
+			IoInstance->CreateDirectoryA(directory);
 
-
-		Util::String fileName(uri);
+		Util::String fileName(directory.AsString() + "/");
 		fileName.Append(entity->Name.AsString());
 		fileName.AppendInt(entity->UniqueID);
+		fileName.Append(".json");
 
 		if (IoInstance->FileExists(fileName))
 			IoInstance->DeleteFile(fileName);
 
-		if (!writer)
-			writer = IO::JsonWriter::Create();
+		writer = IO::JsonWriter::Create();
 
-		if (!fileStream)
-			fileStream = IO::FileStream::Create();
+		fileStream = IO::FileStream::Create();
 
 		fileStream->SetURI(fileName);
-
 		writer->SetStream(fileStream);
 		writer->Open();
 
 		// todo: write "Entity" as root with "components" as parent whereas TransformComponent and Graphicscomponent are the children including their properties
+		writer->BeginObject("Entity");
+
+		TransformComponent* transform = dynamic_cast<TransformComponent*>(entity->GetComponent("Transform"));
 		
-		writer->BeginArray("Entity");
-		writer->BeginArray("components");
-
-		writer->BeginObject("TransformComponent");
-		// todo...
+		writer->Add(transform->Transform, "Transform");
+		writer->Add(transform->Velocity, "Velocity");
 
 
-		writer->BeginObject("GraphicsComponent");
-		// todo...
-		
+		GraphicsComponent* graphics = dynamic_cast<GraphicsComponent*>(entity->GetComponent("Graphics"));
+		writer->Add(graphics->Resource.AsString(), "Resource");
+		writer->Add(graphics->ID.id, "Graphics ID");
+
+		writer->End();
+		writer->Close();
 	}
 
 	void JsonParser::Read(const Util::StringAtom& str)
 	{
-		
-		if (!IoInstance)
-			IoInstance = IO::IoServer::Instance();
+		IoInstance = IO::IoServer::Instance();
 
 
 	}

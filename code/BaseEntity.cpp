@@ -40,8 +40,8 @@ namespace GameEngine
 			return false;
 		}
 
-		if (!componentsTable.Contains(component->GetType()))
-			componentsTable.Add(component->GetType(), components.Size());
+		if (!componentsTable.Contains(component->GetIdentifier()))
+			componentsTable.Add(component->GetIdentifier(), components.Size());
 
 		components.Append(component);
 

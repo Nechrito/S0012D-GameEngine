@@ -22,7 +22,8 @@ namespace GameEngine
 		
 		BaseEntity* GetEntity(const Util::StringAtom& name);
 		BaseEntity* GetEntity(int id);
-
+		Util::Array<BaseEntity*> GetAllEntities() const;
+		
 		void Init();
 		void Update();
 		void Shutdown();

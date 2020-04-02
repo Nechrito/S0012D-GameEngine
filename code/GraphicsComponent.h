@@ -13,7 +13,8 @@ namespace GameEngine
 
 	public:
 		Graphics::GraphicsEntityId ID;
-
+		Resources::ResourceName Resource;
+		
 		GraphicsComponent() = default;
 
 		void Init() override;

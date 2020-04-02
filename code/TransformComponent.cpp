@@ -12,10 +12,11 @@ namespace GameEngine
 		if (Initialized)
 			return;
 
-		this->SetType("Transform");
+		this->SetIdentifier("Transform");
 
 		Velocity = Math::float4(0);
 		Rotation = Transform.getrotate();
+
 		
 		Owner->RegisterVariable("Velocity", Velocity);
 		Owner->RegisterVariable("Rotation", Rotation);

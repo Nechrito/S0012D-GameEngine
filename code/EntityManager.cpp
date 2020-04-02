@@ -42,7 +42,7 @@ namespace GameEngine
 		
 		entity->RegisterComponent(transform);
 		entity->RegisterComponent(graphics);
-
+		
 		const size_t index = entities.Size();
 		
 		entities.Append(entity);
@@ -82,6 +82,11 @@ namespace GameEngine
 			}
 		}
 		return nullptr;
+	}
+
+	Util::Array<BaseEntity*> EntityManager::GetAllEntities() const
+	{
+		return entities;
 	}
 
 	void EntityManager::Init()

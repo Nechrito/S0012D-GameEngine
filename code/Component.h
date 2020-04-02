@@ -17,8 +17,8 @@ namespace GameEngine
 		Component() : Owner(nullptr), Initialized(false) { }
 
 		virtual void SetOwner(BaseEntity* entity);
-		virtual void SetType(const Util::StringAtom& value);
-		virtual Util::StringAtom GetType();
+		virtual void SetIdentifier(const Util::StringAtom& value);
+		virtual Util::StringAtom GetIdentifier();
 
 		virtual void Init();
 		virtual void Update();
@@ -29,7 +29,7 @@ namespace GameEngine
 
 	protected:
 		BaseEntity* Owner;
-		Util::StringAtom Type;
+		Util::StringAtom Identifier;
 		bool Initialized;
 	};
 
@@ -38,14 +38,14 @@ namespace GameEngine
 		this->Owner = entity;
 	}
 
-	inline void Component::SetType(const Util::StringAtom& value)
+	inline void Component::SetIdentifier(const Util::StringAtom& value)
 	{
-		this->Type = value;
+		this->Identifier = value;
 	}
 
-	inline Util::StringAtom Component::GetType()
+	inline Util::StringAtom Component::GetIdentifier()
 	{
-		return Type;
+		return Identifier;
 	}
 
 	inline void Component::Init()
